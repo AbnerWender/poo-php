@@ -1,66 +1,59 @@
 <?php
 
-class Livro{
+require 'main.php';
+
+class Livro implements Crud{
     public $titulo;
     public $autor;
     public $genero;
-    public $status = "Disponível";
+    public $status_livro = "Disponível";
     public $usuario;
 
+    public function __construct($titulo, $autor, $genero){
+        $this->titulo = $titulo;
+        $this->autor = $autor;
+        $this->genero = $genero;
+    }
+
     public function emprestar($usuario){
-        if($this->status != "Disponível"){
-            echo "ja ta emprestado";
-            return;
+        if($this->status_livro != "Disponível"){
+            return throw new Exception("ja ta emprestado!!");
         }
-        $this->status = "Indisponível";
+        $this->status_livro = "Indisponível";
         $this->usuario = $ususario;
     }  
 
     public function devolver(){
-        if($this->status == "Disponível"){
-            echo "ja to aq";
-            return;
+        if($this->status_livro == "Disponível"){
+            return throw new Exception("ja to aq");
         }
-        $this->status = "Disponível";
+        $this->status_livro = "Disponível";
         $this->usuario = null;
     }
 
     public function create(){
-        return $query = 'insert into livro(titulo, autor, genero, status_livro) values("'.$this->titulo.'","'.$this->autor.'","'.$this->genero.'","'.$this->status.'");';
+        return $query = 'insert into livro(titulo, autor, genero, status_livro) values("'.$this->titulo.'","'.$this->autor.'","'.$this->genero.'","'.$this->status_livro.'");';
     }
 
     public function read(){
-        echo"select * from livro where titulo = ".$this->titulo.";";
+        return "select * from livro where titulo = ".$this->titulo.";";
     }
 
-    public function atualizar($arrayColunas){
-        $query = "update usuario set";
+    public function update($valores){
+        $query = "update livro set ";
+        $colunasArray = array_keys($valores);
 
-        $arrayColunas = array(
-            'titulo' => 'cidade de papel',
-            'autor' => 'Agatha crithe',
-            'generoo' => 'terror'
-        );
+        for($contador = 0; $contador < count($valores); $contador++){
+            $coluna = $colunasArray[$contador];
+            $valor = $valores[$coluna];
 
-        $colunas = array_keys($arrayColunas);
-
-        for($contador = 0; $contador <= count($arrayColunas), $contador++){
-            echo $colunas[$contador];
-
-            echo $arrayColunas[$colunas[$contador]]
+            $query .= $contador != (count($valores)-1) ? $coluna . ' = "'. $valor.'", ' :$coluna .' ="'.$valor.'" ';
         }
-
+        return $query .= 'where titulo = "'.$this->titulo.'";';
     }
 
     public function delete(){
-        echo "delete * from livro where titulo = ".$this->titulo.";";
+        return $query = 'delete * from livro where titulo = "'.$this->titulo.'";';
     }
 }
 ?>
-
-
-
-
-
-
-

@@ -1,19 +1,27 @@
 <?php
 
 class Biblioteca{
-    const servidaor = 'localhost';
+    const servidor = 'localhost';
     const usuario = 'root';
     const senha = '';
-    const banco_de_dados = 'biblioteca141';
+    const banco_de_dados = 'biblioteca';
 
     public static function emprestar($livro, $usuario){
-        $livro->emprestar($usuario);
-        $usuario->emprestar($livro);
+        try{
+            $livro->emprestar($usuario);
+            $usuario->emprestar($livro);
+        } catch(Exception $e){
+            echo "<script>alert('".$e->getMessage()."')";
+        }
     }
 
     public static function devolver($livro, $usuario){
-        $livro->devolver();
-        $usuario->devolver($livro);
+        try{
+            $livro->devolver();
+            $usuario->devolver($livro);
+        } catch(Excption $e){
+            echo "<script>alert('".$e->getMessage()."')";
+        }
     }
 
     public static function conexao(){
@@ -22,6 +30,11 @@ class Biblioteca{
 
     public static function cadastrarLivro($livro){
         self::conexao()->query($livro->create());
+        self::conexao()->close();
+    }
+
+    public static function atualizarLivro($livro, $valores){
+        self::conexao()->query($livro->update($valores));
         self::conexao()->close();
     }
 }

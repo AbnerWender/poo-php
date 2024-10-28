@@ -1,6 +1,8 @@
 <?php
 
-class Usuario{
+require 'main.php';
+
+class Usuario implements Crud{
     protected $nome;
     protected $cep;
     protected $livros_emprestados = [];
